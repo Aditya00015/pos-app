@@ -1,0 +1,35 @@
+[
+ {
+  "charts": [],
+  "content": "[{\"id\":\"0-QTU92UNe\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Insight Dashboard</span>\",\"col\":12}},{\"id\":\"-4h_xB59zz\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Insight\",\"col\":12}}]",
+  "custom_blocks": [
+   {
+    "custom_block_name": "Insight",
+    "label": "Insight",
+    "parent": "Insight Dashboard",
+    "parentfield": "custom_blocks",
+    "parenttype": "Workspace"
+   }
+  ],
+  "docstatus": 0,
+  "doctype": "Workspace",
+  "for_user": "",
+  "hide_custom": 0,
+  "icon": null,
+  "is_hidden": 0,
+  "label": "Insight Dashboard",
+  "links": [],
+  "modified": "2024-08-29 13:41:38.575389",
+  "module": null,
+  "name": "Insight Dashboard",
+  "number_cards": [],
+  "parent_page": "",
+  "public": 1,
+  "quick_lists": [],
+  "restrict_to_domain": null,
+  "roles": [],
+  "sequence_id": 40.0,
+  "shortcuts": [],
+  "title": "Insight Dashboard"
+ }
+]

@@ -12,7 +12,7 @@ app_license = "mit"
 # include js, css files in header of desk.html
 # app_include_css = "/assets/pos_api_app/css/pos_api_app.css"
 # app_include_js = "/assets/pos_api_app/js/pos_api_app.js"
-app_include_css = "/assets/pos_api_app/css/point-of-sale.css"
+# app_include_css = "/assets/pos_api_app/css/point-of-sale.css"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/pos_api_app/css/pos_api_app.css"
@@ -70,7 +70,7 @@ app_include_css = "/assets/pos_api_app/css/point-of-sale.css"
 # ------------
 
 # before_install = "pos_api_app.install.before_install"
-after_install = "pos_api_app.pos_api_app.api.api.after_install"
+# after_install = "pos_api_app.pos_api_app.api.api.after_install"
 # after_install = "pos_api_app.pos_api_app.api.api.create_or_update_database"
 
 # fixtures = [{"dt": "User", "filters": [
@@ -95,6 +95,14 @@ after_install = "pos_api_app.pos_api_app.api.api.after_install"
 #                 ]
 #             ]}
 #             ]
+fixtures = [
+    {
+        "dt": "Workspace",
+        "filters": [
+            ["name", "in", ["Insight Dashboard"]]
+        ]
+    }
+]
 
 # Uninstallation
 # ------------
