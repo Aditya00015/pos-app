@@ -12,6 +12,7 @@ app_license = "mit"
 # include js, css files in header of desk.html
 # app_include_css = "/assets/pos_api_app/css/pos_api_app.css"
 # app_include_js = "/assets/pos_api_app/js/pos_api_app.js"
+app_include_css = "/assets/pos_api_app/css/point-of-sale.css"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/pos_api_app/css/pos_api_app.css"
@@ -37,10 +38,11 @@ app_license = "mit"
 # ------------------
 # include app icons in desk
 # app_include_icons = "pos_api_app/public/icons.svg"
+# app_include_js = "/assets/pos_api_app/js/pos_item_cart_2.js"
 
 # Home Pages
 # ----------
-
+# page_js = {"point-of-sale" : "public/js/pos_item_cart.js"}
 # application home page (will override Website Settings)
 # home_page = "login"
 
@@ -69,6 +71,7 @@ app_license = "mit"
 
 # before_install = "pos_api_app.install.before_install"
 after_install = "pos_api_app.pos_api_app.api.api.after_install"
+# after_install = "pos_api_app.pos_api_app.api.api.create_or_update_database"
 
 # fixtures = [{"dt": "User", "filters": [
 #                 [
@@ -140,7 +143,9 @@ after_install = "pos_api_app.pos_api_app.api.api.after_install"
 # override_doctype_class = {
 # 	"ToDo": "custom_app.overrides.CustomToDo"
 # }
-
+override_doctype_class = {
+	"Insights Settings": "pos_api_app.pos_api_app.overrides.insights_settings.CustomInsightsSettings"
+}
 # Document Events
 # ---------------
 # Hook on document methods and events

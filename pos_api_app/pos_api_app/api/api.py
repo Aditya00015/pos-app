@@ -267,3 +267,119 @@ def fetch_stock_entry():
         entry['company'] = stock_entry_dict.get(entry['parent'], {}).get('company')
 
     return [stock_entry , list(stock_entry_detail)]
+
+
+
+
+
+# my_app/install.py
+
+import frappe
+from insights.insights.doctype.insights_data_source.sources.frappe_db import FrappeDB
+
+def create_or_update_database():
+    print("hiiii")
+    # Fetch all active MariaDB data sources
+    data_sources = frappe.get_all(
+        "Insights Data Source",
+        {
+            "database_type": "MariaDB",
+            "status": "Active",
+        },
+        pluck="name",
+    )
+    print(data_sources)
+    for data_source in data_sources:
+        print(f"Processing data source: {data_source}")
+        doc = frappe.get_doc("Insights Data Source", data_source)
+        print(doc._db, "la")
+
+        # Debugging information to understand the condition
+        print(f"doc._db: {type(doc._db)}")
+        print(f"doc.is_site_db: {doc.is_site_db}")
+        
+        try:
+            # Check if the data source is a MariaDB instance
+            if not isinstance(doc._db, FrappeDB) and not doc.is_site_db:
+                print("lll - Not a MariaDB data source")
+                frappe.log_error(f"Skipping {data_source} as it is not a MariaDB data source", "Database Sync Error")
+                continue
+
+            # Begin the database operation
+            with doc._db.engine.begin() as connection:
+                doc._db.table_factory.db_conn = connection
+                table_names = doc._db.table_factory.get_columns_by_tables().keys()
+
+                for table_name in table_names:
+                    print(f"Processing table: {table_name}")
+                    table = get_table(table_name, data_source)
+
+                    # If the table does not exist, attempt to create it
+                    if not table:
+                        print(f"Table {table_name} not found, attempting to create.")
+                        create_table(table_name, data_source)  # Function to create table
+                        table = get_table(table_name, data_source)
+                        
+                        # If the table is still not found, continue to the next table
+                        if not table:
+                            print(f"Failed to create table: {table_name}")
+                            continue
+
+                    # Clear existing table links
+                    clear_table_links(table.name)
+                    
+                    # Get table links and insert them
+                    table_links = doc._db.table_factory.get_table_links(table.label)
+                    insert_table_links(table.name, table_links)
+            
+            # Commit the transaction
+            frappe.db.commit()
+        
+        except Exception as e:
+            print("Error occurred")
+            # Rollback in case of any errors
+            frappe.db.rollback()
+            frappe.log_error(f"Failed to sync tables for {data_source}: {e}", "Database Sync Error")
+
+def get_table(table_name, data_source):
+    return frappe.db.get_value(
+        "Insights Table",
+        {"table": table_name, "data_source": data_source},
+        ["name", "label"],
+        as_dict=True,
+    )
+
+def create_table(table_name, data_source):
+    """Create a new table if it does not exist."""
+    try:
+        # Use Frappe's API to create a new table
+        frappe.get_doc({
+            "doctype": "Insights Table",
+            "table": table_name,
+            "data_source": data_source,
+            "label": table_name.replace("_", " ").title(),  # Optional label formatting
+        }).insert(ignore_permissions=True)
+        frappe.db.commit()
+        print(f"Table {table_name} created successfully.")
+    except Exception as e:
+        frappe.log_error(f"Failed to create table {table_name}: {e}", "Table Creation Error")
+
+def clear_table_links(table_docname):
+    frappe.db.delete("Insights Table Link", {"parent": table_docname})
+
+def insert_table_links(table_docname, table_links):
+    for idx, table_link in enumerate(table_links):
+        frappe.get_doc(
+            {
+                "doctype": "Insights Table Link",
+                "idx": idx + 1,
+                "parent": table_docname,
+                "parenttype": "Insights Table",
+                "parentfield": "table_links",
+                "primary_key": table_link.get("primary_key"),
+                "foreign_key": table_link.get("foreign_key"),
+                "foreign_table": table_link.get("foreign_table"),
+                "foreign_table_label": table_link.get("foreign_table_label"),
+                "cardinality": table_link.get("cardinality"),
+            }
+        ).db_insert(ignore_if_duplicate=True)
