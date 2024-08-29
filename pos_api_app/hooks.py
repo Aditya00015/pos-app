@@ -101,6 +101,9 @@ fixtures = [
         "filters": [
             ["name", "in", ["Insight Dashboard"]]
         ]
+    },
+    {
+        "dt": "Custom HTML Block"
     }
 ]
 

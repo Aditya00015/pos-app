@@ -1,0 +1,13 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Custom HTML Block",
+  "html": "<div class=\"ce-block__content redirect-insight\">\n    <div shortcut_name=\"Dashboard\"><div class=\"widget shortcut-widget-box\" data-widget-name=\"9dee528ddb\">\n\t<div class=\"widget-head\">\n\t\t<div class=\"widget-label\">\n\t\t\t<div class=\"widget-title\"><span class=\"ellipsis\" title=\"Insight\">Insight</span><svg class=\"icon ml-2 icon-xs\" style=\"stroke: grey\">\n\t<use class=\"\" href=\"#icon-arrow-up-right\"></use>\n</svg></div>\n\t\t\t<div class=\"widget-subtitle\"></div>\n\t\t</div>\n\t\t<div class=\"widget-control\"></div>\n\t</div>\n\t<div class=\"widget-body\"></div>\n\t<div class=\"widget-footer\"></div>\n</div><div class=\"divider\"></div></div></div>",
+  "modified": "2024-08-29 13:48:23.633343",
+  "name": "Insight",
+  "private": 0,
+  "roles": [],
+  "script": "const insight_btn = root_element.querySelector(\".redirect-insight\");\ninsight_btn.addEventListener(\"click\",()=>{\n    window.location.href = window.location.origin+\"/insights\"\n})\n",
+  "style": null
+ }
+]
